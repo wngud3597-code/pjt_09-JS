@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Books</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body>
+    <!-- 상단 네비게이션 -->
+    <nav class="navbar navbar-expand-lg bg-body-tertiary mb-3">
+      <div class="container-fluid">
+        <a id="brand-nav" class="navbar-brand" href="#">Books</a>
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navbar-nav"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-nav">
+          <ul class="navbar-nav">
+            <li class="nav-item">
+              <button id="home-nav" class="nav-link active" type="button">
+                Home
+              </button>
+            </li>
+            <li class="nav-item">
+              <button id="create-nav" class="nav-link" type="button">
+                Create
+              </button>
+            </li>
+            <li class="nav-item">
+              <button id="favorites-nav" class="nav-link" type="button">
+                Favorites
+              </button>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Home 탭 -->
+    <div id="home-container" class="container mb-3">
+      <!-- 검색창 영역 -->
+      <h2>Search</h2>
+      <form id="search-form" class="mb-3">
+        <div class="d-flex flex-wrap align-items-center gap-3 mb-2">
+          <div class="form-check form-check-inline mb-0">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="search-criteria"
+              id="criteria-title"
+              value="title"
+              checked
+            />
+            <label class="form-check-label" for="criteria-title">제목</label>
+          </div>
+          <div class="form-check form-check-inline mb-0">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="search-criteria"
+              id="criteria-author"
+              value="author"
+            />
+            <label class="form-check-label" for="criteria-author">작가</label>
+          </div>
+          <div class="form-check form-check-inline mb-0">
+            <input
+              class="form-check-input"
+              type="radio"
+              name="search-criteria"
+              id="criteria-category"
+              value="category"
+            />
+            <label class="form-check-label" for="criteria-category">분류</label>
+          </div>
+          <button
+            id="search-reset-btn"
+            type="button"
+            class="btn btn-sm btn-outline-secondary"
+          >
+            검색 초기화
+          </button>
+        </div>
+        <div class="input-group">
+          <input
+            id="search-input"
+            type="text"
+            class="form-control"
+            placeholder="검색어를 입력하세요"
+          />
+          <button type="submit" class="btn btn-success">Search</button>
+        </div>
+      </form>
+      <hr />
+
+      <!-- 도서 목록 -->
+      <h2 class="mb-3">List</h2>
+      <div id="book-list-row" class="row g-3 mb-2"></div>
+      <nav id="paging-nav" class="d-flex justify-content-center">
+        <ul class="pagination"></ul>
+      </nav>
+    </div>
+
+    <!-- 도서 데이터 입력 탭 -->
+    <div id="create-container" class="container mb-3 d-none">
+      <div class="row">
+        <div class="col-8"><h1 class="w-75 mx-auto">Create</h1></div>
+      </div>
+      <div class="row">
+        <div class="col-8">
+          <form id="create-form" class="w-75 mx-auto">
+            <div class="mb-3">
+              <label for="title-input" class="form-label">제목</label>
+              <input type="text" id="title-input" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="author-input" class="form-label">작가</label>
+              <input type="text" id="author-input" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="img-input" class="form-label">이미지 URL</label>
+              <input type="text" id="img-input" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <label for="desc-input" class="form-label">소개</label>
+              <textarea
+                id="desc-input"
+                class="form-control"
+                cols="30"
+                rows="6"
+              ></textarea>
+            </div>
+            <div class="mb-3">
+              <label for="category-input" class="form-label">분류</label>
+              <input type="text" id="category-input" class="form-control" />
+            </div>
+            <div class="mb-3">
+              <input type="submit" value="추가" class="btn btn-primary" />
+            </div>
+          </form>
+        </div>
+        <div class="col-4">
+          <ul id="create-book-errors" class="list-unstyled"></ul>
+        </div>
+      </div>
+    </div>
+
+    <!-- 즐겨찾기 탭 -->
+    <div id="favorites-container" class="container mb-3 d-none">
+      <h2 class="mb-3">Favorites</h2>
+      <p id="favorites-empty-msg" class="text-muted d-none">
+        즐겨찾기에 추가한 도서가 나열됩니다.
+      </p>
+      <div id="favorites-list-row" class="row g-3 mb-2"></div>
+    </div>
+
+    <!-- 도서 상세정보 모달 -->
+    <div
+      id="book-details-modal"
+      class="modal fade"
+      tabindex="-1"
+      aria-labelledby="modal-book-title"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 id="modal-book-title" class="modal-title">도서 상세정보</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <div class="container-fluid">
+              <div class="row g-3">
+                <div class="col-md-5">
+                  <div class="d-flex justify-content-center align-items-center">
+                    <img
+                      id="modal-book-cover"
+                      src="assets/stack-of-books.png"
+                      alt=""
+                      class="img-fluid object-fit-contain"
+                      style="height: 60vh"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-7">
+                  <p
+                    id="modal-book-description"
+                    class="overflow-y-auto mb-0"
+                    style="max-height: 60vh"
+                  ></p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <script src="data/categories.js"></script>
+    <script src="data/authors.js"></script>
+    <script src="data/books.js"></script>
+    <script src="js/script.js"></script>
+  </body>
+</html>

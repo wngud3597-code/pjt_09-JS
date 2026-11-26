@@ -1,0 +1,23 @@
+# OS
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE / Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Environment / Secrets
+.env
+.env.*
+!.env.example
+
+# Python / uv (로컬 정적 서버 또는 검증 스크립트 사용 시)
+__pycache__/
+*.py[cod]
+.venv/
+
+# Logs / Temp
+*.log
